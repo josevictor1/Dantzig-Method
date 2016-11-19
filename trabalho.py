@@ -1,0 +1,80 @@
+
+n = input("Numero de origens: ")
+m = input("Numero de destinos: ")
+e = input("Numero de entrepostos: ")
+
+def le_dadosorigem(n):
+
+    l = []
+    for i in range(n):
+        i = input()
+        l.append(i)
+    return l
+
+def le_dadosdestino(m):
+
+    l = []
+    for i in range(n):
+        i = input()
+        l.append()
+    return l
+
+def le_matriz_coeficientes(matriz_coeficientes):
+
+    for i in matriz_coeficientes:
+        i input()
+    return matriz_coeficientes
+
+def verifica_balanceamento(lista_demanda,lista_oferta):
+
+    demanda = 0
+    oferta = 0
+
+    for i in lista_demanda:
+        demanda = demanda + i
+    for i in lista_origem:
+        oferta = oferta + i
+
+    if demanda == oferta:
+        return "balanceado"
+    elif demanda > oferta:
+        lista_oferta.append(demanda - oferta)
+        return "oferta desbalanceada"
+    else:
+        lista_demanda.append(oferta - demanda)
+        return "demanda desbalanceado"
+
+
+def adiciona_linha(matriz_coeficientes):
+
+    l = []
+    l = [0 for i in range(len(matriz_coeficientes[0]))]
+    matriz_coeficientes.append(l)
+
+
+def adiciona_coluna(matriz_coeficientes):
+
+    for i in matriz_coeficientes:
+        i.append(0)
+
+
+
+def balanceamento(lista_demanda,lista_oferta,matriz_coeficientes):
+
+    verifica = verifica_balanceamento(lista_demanda,lista_oferta)
+
+    if verifica == "balanceado":
+        print "Problema balanceado"
+    elif verifica == "oferta desbalanceada":
+        adiciona_linha(matriz_coeficientes)
+    else:
+        adiciona_coluna(matriz_coeficientes)
+
+
+
+
+
+
+
+
+
