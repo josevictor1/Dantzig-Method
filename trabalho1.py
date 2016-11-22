@@ -80,3 +80,35 @@ def balanceamento(lista_demanda,lista_oferta,matriz_coeficientes):
     else:
         adiciona_coluna(matriz_coeficientes)
 
+def verifica(l):
+    for i in l:
+        if i != 0:
+            return False
+    return True
+
+
+
+def cantonoroeste(problema):
+    linha = 0
+    coluna = 0
+    while(verifica(problema.l_oferta) and verifica(l_demanda)):
+        if problema.l_oferta[linha] < problema.l_demanda[coluna]:
+            problema.matriz_x[linha][coluna] = problema.l_oferta[linha]
+            problema.l_demanda[coluna] = problema.l_demanda[coluna] - problema.l_oferta[linha]
+            problema.l_oferta[linha] = 0
+            linha = linha + 1
+        elif problema.l_oferta[linha] > problema.l_demanda[coluna]:
+            problema.matriz_x[linha][coluna] = problema.l_demanda[coluna]
+            problema.l_oferta[linha] = problema.l_oferta[linha] - problema.l_demanda[coluna]
+            problema.l_demanda[coluna] = 0
+            coluna = coluna + 1
+        else:
+            problema.matriz_x[linha][coluna] = problema.l_demanda[coluna]
+            problema.l_oferta[linha] = 0
+            problema.l_demanda[coluna] = 0
+            coluna = coluna + 1
+            linha = linha + 1
+
+
+
+
