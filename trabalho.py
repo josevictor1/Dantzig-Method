@@ -3,6 +3,16 @@ n = input("Numero de origens: ")
 m = input("Numero de destinos: ")
 e = input("Numero de entrepostos: ")
 
+class Problema(object):
+
+    def _init_(sefl,matriz_coeficientes,matriz_x,l_oferta,l_demanda):
+        self.matriz_coeficientes = matriz_coeficientes
+        self.matriz_x = matriz_x
+        self.l_oferta = l_oferta
+        self.l_demanda = l_demanda
+
+
+
 def le_dadosorigem(n):
 
     l = []
@@ -22,7 +32,7 @@ def le_dadosdestino(m):
 def le_matriz_coeficientes(matriz_coeficientes):
 
     for i in matriz_coeficientes:
-        i input()
+        i = input()
     return matriz_coeficientes
 
 def verifica_balanceamento(lista_demanda,lista_oferta):
@@ -69,7 +79,7 @@ def balanceamento(lista_demanda,lista_oferta,matriz_coeficientes):
         adiciona_linha(matriz_coeficientes)
     else:
         adiciona_coluna(matriz_coeficientes)
-
+'''
 def diferenca_coluna(matriz_coeficientes):
 
     primeiro_menor = 0
@@ -83,27 +93,63 @@ def diferenca_coluna(matriz_coeficientes):
                 segundo_menor = primeiro_menor
                 primeiro_menor = matriz_coeficientes[j][i]
             elif segundo_menor
-
-
-
+'''
+'''
 
 def diferenca_linha(matriz_coeficientes):
 
-    primeiro_menor = 0
-    segundo_menor =
-    l = []
-    for i in range(len(matriz_coeficientes)):
-        primeiro_menor = matriz_coeficientes[i][0]
-        segundo_menor = primeiro_menor
-        for j in range(2,len(matriz_coeficientes[0])):
-            if primeiro_menor > matriz_coeficientes[i][j]:
-                segundo_menor = primeiro_menor
-                primeirto_menor = matriz_coeficientes[i][j]
-            elif segundo_menor > matriz_coeficientes[i][j]:
-                segundo_menor = matriz_coeficientes[i][j]
-        l.append(segundo_menor - primeiro_menor)
-    return l
+    nova = []
+    aux = []
 
+    for i in matriz_coeficientes:
+        for j in i:
+            aux.append(j)
+        a = min(aux)
+        aux.remove(a)
+        if a == []:
+            b = a
+            nova.append(b - a)
+        else:
+            b = min(aux)
+            nova.append(b - a)
+
+    return nova
+
+def diferenca_coluna(matriz_coeficientes):
+
+    nova = []
+    aux = []
+
+    for i in range(len(matriz_coeficientes[0])):
+        for j in range(len(matriz_coeficientes)):
+            aux.append(matriz_coeficientes[j][i])
+        a = min(aux)
+        aux.remove(a)
+        if a == []:
+            b = a
+            nova.append(b - a)
+        else:
+            b = min(aux)
+            nova.append(b - a)
+
+    return nova
+'''
+'''
+def vogel(problema):
+
+    linha = diferenca_linha(problema.matriz_coeficientes)
+    coluna = diferenca_linha(problema.matriz_coeficientes)
+
+    a = max(linha)
+    b = max(coluna)
+
+    if a > b:
+        indice = linha.index(a)
+        valor = min(problema.matriz_coeficientes[indice])
+        problema.matriz_x[indice][problema.matriz_coeficientes[indice].index(valor)] = min(problema.l_oferta[indice],l_demanda[problema.matriz_coeficientes[indice].index(valor)])
+
+    if b > a:
+'''
 
 
 
