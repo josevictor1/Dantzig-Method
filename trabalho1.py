@@ -82,7 +82,7 @@ def cantonoroeste(problema):
     linha = 0
     coluna = 0
 
-    while(verifica(problema.l_oferta) and verifica(l_demanda)):
+    while (not (verifica(problema.l_oferta) and verifica(problema.l_demanda))):
         if problema.l_oferta[linha] < problema.l_demanda[coluna]:
             problema.matriz_x[linha][coluna] = problema.l_oferta[linha]
             problema.l_demanda[coluna] = problema.l_demanda[coluna] - problema.l_oferta[linha]
