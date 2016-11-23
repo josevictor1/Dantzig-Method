@@ -34,5 +34,8 @@ def main():
     mostra_quadro(p)
     balanceamento(p)
     mostra_quadro(p)
+    #Teste canto noroeste OK
+    cantonoroeste(p)
+    mostra_quadro(p)
 
 main()
