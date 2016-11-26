@@ -125,4 +125,101 @@ def mostra_quadro(problema):
         print i,
         print "      |",
 
+def transformalista(mariz):
+
+    l = []
+
+    for i in matriz:
+        for j in i:
+            l.append(matriz)
+
+    return l
+
+def montasistema(lista1):
+
+    l = []
+
+    for i in lista1:
+        if i != 0:
+            l.append(lista1.index(i))
+
+    return l
+
+def contaelementos(lista):
+    n = 0
+    for i in lista:
+        if i != 0:
+            n = n + 1
+
+    return n
+
+def linhaalocada(matriz):
+
+    maior = 0
+    linha = 0
+
+    for i in range(len(matriz)):
+        if maior < contaelementos(matriz[i]):
+            maior = contaelementos(matriz[i])
+            linha = i
+
+    return linha
+
+def derivauv(problema):
+
+    uv = []
+    u = [1.1 for i in range(len(problema.l_oferta))]
+    v = [1.1 for i in range(len(problema.l_demanda))]
+
+    intervalo = len(problema.l_demanda)
+
+    linha = linhaalocada(problema.matriz_x)
+
+    u[linha] = 0
+
+    for i in range(len(problema.matriz_x[linha])):
+        if problema.matriz_x[linha][i] != 0:
+            v[i] = u[linha] + problema.matriz_coeficientes[linha][i]
+
+    for i in range(len(problema.matriz_coeficientes)):
+        for j in range(intervalo):
+            if problema.matriz_x[i][j] != 0:
+                if u[i] == 1.1 and v[j] != 1.1:
+                    u[i] = problema.matriz_coeficientes[i][j] - v[j]
+                elif u[i] != 1.1 and v[j] == 1.1:
+                    v[j] = problema.matriz_coeficientes[i][j] - u[i]
+
+    uv.append(u)
+    uv.append(v)
+
+    return uv
+
+def criteriodeotimalidade(problema,uv):
+
+    menor = 0
+    co = 0
+    x = 0
+    y = 0
+
+    for i in range(len(problema.matriz_coeficientes)):
+        for j in range(len(problema.matriz_coeficientes[0])):
+            co = problema.matriz_coeficientes[i][j] - uv[0][i] - uv[1][j]
+            if problema.matriz_x[i][j] == 0 and (co < 0):
+                if co < menor:
+                    menor = co
+                    x = i
+                    y = j
+
+    if menor == 0:
+        return False
+    else:
+        problema.matriz_x[x][y] = menor
+        return True
+
+
+
+
+
+
+
 
