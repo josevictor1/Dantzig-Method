@@ -7,6 +7,13 @@ class Problema(object):
         self.l_oferta = []
         self.l_demanda = []
 
+def copiamatriz(mat):
+    mat1 = []
+    for i in mat:
+        mat1.append(i[:])
+
+    return mat1
+
 def le_dados(n):
 
     l = []
@@ -81,22 +88,24 @@ def cantonoroeste(problema):
 
     linha = 0
     coluna = 0
+    demanda = problema.l_demanda[:]
+    oferta = problema.l_oferta[:]
 
-    while (not (verifica(problema.l_oferta) and verifica(problema.l_demanda))):
-        if problema.l_oferta[linha] < problema.l_demanda[coluna]:
-            problema.matriz_x[linha][coluna] = problema.l_oferta[linha]
-            problema.l_demanda[coluna] = problema.l_demanda[coluna] - problema.l_oferta[linha]
-            problema.l_oferta[linha] = 0
+    while (not (verifica(oferta) and verifica(demanda))):
+        if oferta[linha] < demanda[coluna]:
+            problema.matriz_x[linha][coluna] = oferta[linha]
+            demanda[coluna] = demanda[coluna] - oferta[linha]
+            oferta[linha] = 0
             linha = linha + 1
-        elif problema.l_oferta[linha] > problema.l_demanda[coluna]:
-            problema.matriz_x[linha][coluna] = problema.l_demanda[coluna]
-            problema.l_oferta[linha] = problema.l_oferta[linha] - problema.l_demanda[coluna]
-            problema.l_demanda[coluna] = 0
+        elif oferta[linha] > demanda[coluna]:
+            problema.matriz_x[linha][coluna] = demanda[coluna]
+            oferta[linha] = oferta[linha] - demanda[coluna]
+            demanda[coluna] = 0
             coluna = coluna + 1
         else:
-            problema.matriz_x[linha][coluna] = problema.l_demanda[coluna]
-            problema.l_oferta[linha] = 0
-            problema.l_demanda[coluna] = 0
+            problema.matriz_x[linha][coluna] = demanda[coluna]
+            oferta[linha] = 0
+            demanda[coluna] = 0
             coluna = coluna + 1
             linha = linha + 1
 
@@ -125,15 +134,6 @@ def mostra_quadro(problema):
         print i,
         print "      |",
 
-def transformalista(mariz):
-
-    l = []
-
-    for i in matriz:
-        for j in i:
-            l.append(matriz)
-
-    return l
 
 def montasistema(lista1):
 
@@ -194,7 +194,7 @@ def derivauv(problema):
 
     return uv
 
-def criteriodeotimalidade(problema,uv):
+def criteriodeotimalidade(problema,uv,coordenada):
 
     menor = 0
     co = 0
@@ -210,16 +210,110 @@ def criteriodeotimalidade(problema,uv):
                     x = i
                     y = j
 
-    if menor == 0:
-        return False
-    else:
-        problema.matriz_x[x][y] = menor
+    if menor >= 0:
         return True
+    else:
+        coordenada.append(x)
+        coordenada.append(y)
+        return False
 
+def verificasomalinha(linha,resultante):
 
+    soma = 0
 
+    for i in linha:
+        soma = soma + i
 
+    if soma == resultante:
+        return True
+    else:
+        return False
 
+def verificasomacoluna(matriz,resultante,coluna):
 
+    soma = 0
 
+    for i in range(len(matriz)):
+        soma = soma + matriz[i][coluna]
 
+    if soma == resultante:
+        return True
+    else:
+        return False
+
+def encontraproximocoluna(matriz,inicial):
+
+    menor = 0
+
+    for i in range(len(matriz)):
+        if matriz[i][inicial[1]] != 0 and i != inicial[0]:
+            if menor == 0:
+                menor = i
+            elif abs(inicial[0] - i) < abs(inicial[0] - menor):
+                menor = i
+
+    return menor
+
+def encontraproximolinha(linha,inicial):
+
+    menor  = 0
+
+    for i in range(len(linha)):
+        if linha[i] != 0 and i != inicial[1]:
+            if menor == 0:
+                menor = i
+            elif abs(inicial[1] - i) < abs(inicial[1] - menor):
+                menor  = i
+
+    return menor
+
+def otimalidade(problema):
+
+    uv = []
+    inicial = []
+    atual = []
+
+    while(True):
+
+        uv = derivauv(problema)
+
+        if criteriodeotimalidade(problema,uv,inicial):
+            return problema
+        else:
+            copia = copiamatriz(problema.matriz_x)
+            copia[inicial[0]][inicial[1]] = 1
+            menor = [0,0]
+            atual = inicial[:]
+            subtrai = []
+            soma = []
+
+            flag = True
+
+            while flag:
+                if not verificasomacoluna(copia,problema.l_demanda[atual[1]],atual[1]):
+
+                    atual[0] = encontraproximocoluna(copia,atual)
+
+                    if subtrai != [] and problema.matriz_x[menor[0]][menor[1]] > problema.matriz_x[atual[0]][atual[1]]:
+                        menor = atual[:]
+
+                    subtrai.append([atual[0],atual[1]])
+                    copia[atual[0]][atual[1]] = copia[atual[0]][atual[1]] - 1
+
+                elif not verificasomalinha(copia[atual[0]],problema.l_oferta[inicial[0]]):
+                    atual[1] = encontraproximolinha(copia,atual)
+                    soma.append([atual[0],atual[1]])
+                    copia[atual[0]][atual[1]] = copia[atual[0]][atual[1]] + 1
+
+                else:
+                    flag = False
+
+                    for i in soma:
+                        problema.matriz_x[i[0]][i[1]] = problema.matriz_x[i[0]][i[1]] + problema.matriz_x[menor[0]][menor[1]]
+
+                    subtrai.remove(menor)
+                    for i in subtrai:
+                        problema.matriz_x[i[0]][i[1]] = problema.matriz_x[i[0]][i[1]] - problema.matriz_x[menor[0]][menor[1]]
+
+                    problema.matriz_x[inicial[0]][inicial[1]] = problema.matriz_x[menor[0]][menor[1]]
+                    problema.matriz_x[menor[0]][menor[1]] = 0

@@ -1,6 +1,5 @@
 from trabalho1 import *
 
-
 def main():
 
     #n = input("Numero de origens: ")
@@ -36,6 +35,9 @@ def main():
     mostra_quadro(p)
     #Teste canto noroeste OK
     cantonoroeste(p)
+    mostra_quadro(p)
+    #Teste otimalidade OK
+    otimalidade(p)
     mostra_quadro(p)
 
 main()
