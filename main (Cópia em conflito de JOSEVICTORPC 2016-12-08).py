@@ -68,18 +68,17 @@ def main():
     #Teste canto noroeste OK
     variaveisbasicas = []
     print (p.matriz_coeficientes)
-   
     cantonoroeste(p,variaveisbasicas)
     corrige(p,lista)
     mostra_quadro(p)
     print (p.matriz_x)
     #Teste otimalidade OK
-    uv = derivauv(p)
+    #uv = derivauv(p)
     #coordenada = []
     #criteriodeotimalidade(p,uv,coordenada)
-    print "uv calculado",uv
+    #print "uv calculado",uv
     print ("coordenada")
-    #otimalidade(p,lista)
+    otimalidade(p,lista)
     #mostra_quadro(p)
 
     print (p.matriz_x)
