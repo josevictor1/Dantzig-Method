@@ -7,6 +7,12 @@ class Problema(object):
         self.l_oferta = []
         self.l_demanda = []
 
+def imprime(matriz):
+    for linha in matriz:
+       for valor in linha:
+           print("{:>6.2f}".format(valor), end=' ')
+       print()
+
 def copiamatriz(mat):
     mat1 = []
     for i in mat:
@@ -92,6 +98,10 @@ def cantonoroeste(problema, lista):
 
     linha = 0
     coluna = 0
+
+    print(problema.l_demanda)
+    print(problema.l_oferta)
+
     demanda = problema.l_demanda[:]
     oferta = problema.l_oferta[:]
 
@@ -279,8 +289,8 @@ def derivauv(problema,lista):
         if [linha,i] in lista:
             #print v[i]
             v[i] = u[linha] + problema.matriz_coeficientes[linha][i]
-            
-    
+
+
     while (1.1 in u) or (1.1 in v):
         #print "entrou"
         for i in lista:
@@ -319,7 +329,6 @@ def criteriodeotimalidade(problema,uv,coordenada):
                     y = j
 
     if menor >= 0:
-        print "triscou aqui"
         return True
     else:
         coordenada[0] = x
@@ -408,10 +417,10 @@ def proximo(lista,visitados,nodo,flag):
     for i in lista:
         #print i[flag]
 
-        if (not (i in visitados)) and i[flag] == nodo:    
+        if (not (i in visitados)) and i[flag] == nodo:
                 #print "visitados",i[flag]
                 return i
-         
+
         #print i
     return []
 
@@ -423,20 +432,20 @@ def percorre_caminho(origem,lista):
     visitados = []
     flag = 1
     atual = [-1,-1]
-    print atual
+    #print(atual)
     atual = proximo(lista, visitados, origem[flag], flag)
     #empilha(atual, pilha)
-    print "origem",origem
-    print "atual", atual
+    #print("origem",origem)
+    #print("atual", atual)
     while atual != origem:
-        
+
         if flag == 1:
             flag = 0
         else:
             flag = 1
 
         if atual == []:
-            print pilha
+            #print(pilha)
             desempilha(pilha)
             if pilha == []:
                 atual = proximo(lista, visitados, origem[flag], flag)
@@ -444,27 +453,45 @@ def percorre_caminho(origem,lista):
                 atual = pilha[0]
             #atual = proximo(lista, visitados, atual[flag], flag)
         else:
-            print "nao retornou vazio"
+            #print("nao retornou vazio")
             visitados.append(atual)
             empilha(atual, pilha)
-            print "pilha",pilha
-            print "atual",atual
+            #print("pilha",pilha)
+            #print("atual",atual)
             #atual = proximo(lista, visitados, atual[flag], flag)
             #print "novo atual", atual
-        atual = proximo(lista, visitados, atual[flag], flag) 
+        atual = proximo(lista, visitados, atual[flag], flag)
         #print 'visitadosAAAAAAAAAAAAAAAAAAAAAAAAAAAA',visitados
     empilha(atual,pilha)
-    print "PILHA",pilha
+    #print("PILHA",pilha)
     return pilha
 
-    
+def verificacorretude(problema):
+
+
+    for i in range(len(problema.matriz_x)):
+        soma = 0
+        for j in range(len(problema.matriz_x[0])):
+            soma = soma + problema.matriz_x[i][j]
+        if soma != problema.l_oferta[i]:
+            return False
+
+    for i in range(len(problema.matriz_x[0])):
+        soma = 0
+        for j in range(len(problema.matriz_x)):
+            soma = soma + problema.matriz_x[j][i]
+        if soma != problema.l_demanda[i]:
+            return False
+
+    return True
+
 
 def otimalidade(problema,lista):
 
     uv = []
-    
+
     pilha = []
-    
+
     while True:
         inicial = [0,0]
         uv = derivauv(problema,lista)
@@ -473,48 +500,61 @@ def otimalidade(problema,lista):
             return problema
         else:
             lista.append(inicial)
-            print lista
             pilha = percorre_caminho(inicial,lista)
-            print pilha
-            
-            
-            
-            
+
             if pilha != []:
                 subtrai = []
                 soma = []
-                
+
                 for i in range(len(pilha)):
                     if i % 2 == 0:
-                        soma.append(pilha[i])      
+                        soma.append(pilha[i])
                     else:
                         subtrai.append(pilha[i])
-                print "Subtrai",subtrai
-                print "Soma", soma
 
                 menor = subtrai[0]
-                
+
                 for i in subtrai:
                     if problema.matriz_x[i[0]][i[1]] < problema.matriz_x[menor[0]][menor[1]]:
                         menor = i
                     elif problema.matriz_x[i[0]][i[1]] == problema.matriz_x[menor[0]][menor[1]] and problema.matriz_coeficientes[i[0]][i[1]] > problema.matriz_coeficientes[menor[0]][menor[1]]:
                         menor = i
-                print"MENOR",menor
+
                 valormenor = problema.matriz_x[menor[0]][menor[1]]
                 for i in soma:
                     problema.matriz_x[i[0]][i[1]] = problema.matriz_x[i[0]][i[1]] + valormenor
-                
+
                 for i in subtrai:
                     problema.matriz_x[i[0]][i[1]] = problema.matriz_x[i[0]][i[1]] - valormenor
-                    print 
+
                 lista.remove(menor)
-            print "CALCULADO",problema.matriz_x
-            print "LISTS", lista
-        
 
 
-                
-                
+
+def mostraresultado(problema):
+
+    print("\nMatriz Coeficientes:\n")
+    imprime(problema.matriz_coeficientes)
+
+    print("\n---------------------------------------\n")
+
+    print ("\nMatriz X:\n")
+    imprime(problema.matriz_x)
+
+    resultado = 0
+
+    for i in range(len(problema.matriz_x)):
+        for j in range(len(problema.matriz_x[0])):
+
+            if problema.matriz_x[i][j] != 0:
+                resultado = resultado + (problema.matriz_x[i][j] * problema.matriz_coeficientes[i][j])
+
+    print("\nResultado Z: ",resultado)
+
+
+
+
+
 '''
 def otimalidade(problema,lista):
 
